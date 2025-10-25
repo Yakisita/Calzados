@@ -1,0 +1,138 @@
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calzados — Iniciar sesión</title>
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+      justify-content: center;
+    }
+    body {
+      
+      display: flex;
+      background: linear-gradient(180deg, #111, #1b1b1b);
+      color: #fff;
+    }
+
+    .login-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      color: #222;
+      padding: 40px;
+    }
+
+    .login-container h1 {
+      font-size: 40px;
+      margin-bottom: 30px;
+      color: #111;
+      font-weight: 800;
+    }
+
+    .login-container input {
+      width: 80%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .login-container button {
+      width: 80%;
+      padding: 15px;
+      background-color: #ff6b6b;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-container button:hover {
+      background-color: #e14e4e;
+    }
+
+    /* Centrar el mensaje */
+    #msg {
+      text-align: center;
+      width: 100%;
+      margin-top: 12px;
+      color: #ff4d4f; /* mantiene el color que ya tenías en móvil */
+    }
+
+    /* Adaptado para móvil */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+        background: linear-gradient(180deg, #111, #2a2a2a);
+      }
+
+      .login-container {
+        width: 100%;
+        height: 100vh;
+        background: #0f0f10;
+        color: #fff;
+        padding: 40px 20px;
+      }
+
+      .login-container h1 {
+        color: #ff6b6b;
+        font-size: 32px;
+        margin-bottom: 25px;
+      }
+
+      .login-container input {
+        width: 90%;
+        padding: 14px;
+        font-size: 16px;
+        background: #1a1a1a;
+        border: 1px solid #333;
+        color: #fff;
+      }
+
+      .login-container input::placeholder {
+        color: #888;
+      }
+
+      .login-container button {
+        width: 90%;
+        background-color: #ff6b6b;
+        color: #fff;
+        font-size: 17px;
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Calzados</h1>
+    <input type="password" id="password" placeholder="Ingresa la contraseña">
+    <button onclick="login()">Iniciar sesión</button>
+    <p id="msg"></p>
+  </div>
+
+  <div class="image-side"></div>
+
+  <script>
+    function login() {
+      const pass = document.getElementById("password").value.trim();
+      const msg = document.getElementById("msg");
+      if (pass === "zuloeta27") {
+        localStorage.setItem("logeado", "true");
+        window.location.href = "catalogo.html";
+      } else {
+        msg.innerText = "❌ Contraseña incorrecta";
+      }
+    }
+  </script>
+</body>
+</html>
