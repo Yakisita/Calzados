@@ -1,60 +1,75 @@
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Yakisita — Catálogo Dama (Mobile-ready)</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yakisita — Catálogo Dama</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --bg:#0f0f10; --panel:#0b0b0c; --card:#111214;
-    --muted:#bdbdbd; --accent:#f7c948; --primary:#ff6b6b;
-    --success:#34d399; --glass: rgba(255,255,255,0.04);
-    --danger:#ff4d4f;
-  }
-  *{box-sizing:border-box;font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
-  body{margin:0;background:linear-gradient(180deg,#080808 0%, #0f0f10 100%);color:#fff;min-height:100vh}
-  header{background:var(--panel);border-bottom:1px solid rgba(255,255,255,0.03);padding:12px 20px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:60}
-  .brand{display:flex;align-items:center;gap:12px}
-  .logo{ font-weight:800;font-size:20px;color:#ff78a0;letter-spacing:0.4px }
-  .brand-sub{font-size:13px;color:var(--muted);font-weight:600}
-  .spacer{flex:1}
-  .controls{display:flex;gap:12px;align-items:center}
-  .search{ display:flex;align-items:center;background:#0b0b0c;padding:8px;border-radius:999px;border:1px solid rgba(255,255,255,0.03); min-width:240px; gap:8px }
-  .search input{background:transparent;border:0;outline:0;color:#fff;padding:6px 6px;width:180px}
-  .select{ background:#0b0b0c;color:var(--muted);border:1px solid rgba(255,255,255,0.03);padding:8px 10px;border-radius:10px }
-  .btn-logout{background:#fff;color:#0b0b0c;padding:8px 12px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
-  .btn-add{background:var(--primary);color:#111;padding:8px 12px;border-radius:10px;border:0;font-weight:800;cursor:pointer}
-  main{padding:12px 20px 40px;max-width:1200px;margin:0 auto}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
-  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden; box-shadow:0 6px 18px rgba(2,6,23,0.6)}
-  .label{ position:absolute;left:12px;top:12px;background:var(--accent);color:#111;padding:6px 8px;border-radius:8px;font-weight:700;font-size:12px }
-  .img-wrap{height:180px;border-radius:10px;overflow:hidden;background:#0a0a0a;display:flex;align-items:center;justify-content:center}
-  .img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
-  .brand-name{font-size:12px;color:var(--muted);margin-top:10px}
-  h3{margin:6px 0 8px 0;font-size:16px;color:#fff}
-  .tallas{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px}
-  .size{ width:34px;height:34px;border-radius:50%;display:inline-grid;place-items:center;background:#0b0b0c;color:var(--muted); border:1px solid rgba(255,255,255,0.04);cursor:default;font-weight:700 }
-  .price{margin-top:10px;font-weight:800;color:var(--accent);font-size:18px}
-  .card-footer{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
-  .btn{ padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700; }
-  .btn-qr{background:var(--success);color:#041014}
-  .qr-canvas{display:block;margin-top:10px}
-  .modal-back{ position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:120 }
-  .modal{ width:420px; max-width:94%; background:#0b0b0c; padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.04); box-shadow:0 8px 30px rgba(0,0,0,0.6) }
-  .modal h3{ margin-bottom:8px; color:#fff }
-  .field{ display:flex; flex-direction:column; gap:6px; margin-bottom:10px }
-  .field input{ padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:#fff; outline:none }
-  .modal-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:6px }
-  .btn-cancel{ background:#222; color:var(--muted); padding:8px 12px; border-radius:8px; border:0; cursor:pointer }
-  .btn-save{ background:var(--success); color:#041014; padding:8px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:800 }
-  .img-preview{ width:100%; height:160px; object-fit:cover; border-radius:8px; background:#090909; display:block }
-  .small-muted{ font-size:12px;color:var(--muted) }
-  #actionToast { max-width:1200px; margin:12px auto 0; display:none; padding:10px 14px; border-radius:8px; text-align:center; font-weight:700; color:#fff; background:rgba(11,11,11,0.8); border:1px solid rgba(255,255,255,0.04); z-index:70; }
-  @media (max-width:768px){header{padding:10px 14px;gap:8px}.search input{width:130px}.grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}.img-wrap{height:200px}h3{font-size:15px}.price{font-size:17px}.btn{padding:10px 12px}.size{width:32px;height:32px;font-size:13}#actionToast{font-size:14px;padding:8px 12px}}
-  @media (max-width:480px){.grid{grid-template-columns:1fr}.img-wrap{height:240px}h3{font-size:16px}.price{font-size:18px}}
+:root{
+  --bg:#0f0f10; --panel:#0b0b0c; --card:#111214; --muted:#bdbdbd; --accent:#f7c948;
+  --primary:#ff6b6b; --success:#34d399; --danger:#ff4d4f; --glass: rgba(255,255,255,0.04);
+}
+*{box-sizing:border-box;font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
+body{margin:0;background:linear-gradient(180deg,#080808 0%, #0f0f10 100%);color:#fff;min-height:100vh}
+header{background:var(--panel);border-bottom:1px solid rgba(255,255,255,0.03);padding:12px 20px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:60}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{ font-weight:800;font-size:20px;color:#ff78a0;letter-spacing:0.4px }
+.brand-sub{font-size:13px;color:var(--muted);font-weight:600}
+.spacer{flex:1}
+.controls{display:flex;gap:12px;align-items:center}
+.search{ display:flex;align-items:center;background:#0b0b0c;padding:8px;border-radius:999px;border:1px solid rgba(255,255,255,0.03); min-width:240px; gap:8px }
+.search input{background:transparent;border:0;outline:0;color:#fff;padding:6px 6px;width:180px}
+.select{ background:#0b0b0c;color:var(--muted);border:1px solid rgba(255,255,255,0.03);padding:8px 10px;border-radius:10px }
+.btn-logout{background:#fff;color:#0b0b0c;padding:8px 12px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+.btn-add{background:var(--primary);color:#111;padding:8px 12px;border-radius:10px;border:0;font-weight:800;cursor:pointer}
+main{padding:12px 20px 40px;max-width:1200px;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden; box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+.label{ position:absolute;left:12px;top:12px;background:var(--accent);color:#111;padding:6px 8px;border-radius:8px;font-weight:700;font-size:12px }
+.img-wrap{height:180px;border-radius:10px;overflow:hidden;background:#0a0a0a;display:flex;align-items:center;justify-content:center}
+.img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.brand-name{font-size:12px;color:var(--muted);margin-top:10px}
+h3{margin:6px 0 8px 0;font-size:16px;color:#fff}
+.tallas{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px}
+.size{ width:34px;height:34px;border-radius:50%;display:inline-grid;place-items:center;background:#0b0b0c;color:var(--muted); border:1px solid rgba(255,255,255,0.04);cursor:default;font-weight:700 }
+.price{margin-top:10px;font-weight:800;color:var(--accent);font-size:18px}
+.card-footer{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
+.btn{ padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700; }
+.btn-qr{background:var(--success);color:#041014}
+.qr-canvas{display:block;margin-top:10px}
+.modal-back{ position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:120 }
+.modal{ width:420px; max-width:94%; background:#0b0b0c; padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.04); box-shadow:0 8px 30px rgba(0,0,0,0.6) }
+.modal h3{ margin-bottom:8px; color:#fff }
+.field{ display:flex; flex-direction:column; gap:6px; margin-bottom:10px }
+.field input{ padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:#fff; outline:none }
+.modal-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:6px }
+.btn-cancel{ background:#222; color:var(--muted); padding:8px 12px; border-radius:8px; border:0; cursor:pointer }
+.btn-save{ background:var(--success); color:#041014; padding:8px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:800 }
+.img-preview{ width:100%; height:160px; object-fit:cover; border-radius:8px; background:#090909; display:block }
+.small-muted{ font-size:12px;color:var(--muted) }
+#actionToast { max-width:1200px; margin:12px auto 0; display:none; padding:10px 14px; border-radius:8px; text-align:center; font-weight:700; color:#fff; background:rgba(11,11,11,0.8); border:1px solid rgba(255,255,255,0.04); z-index:70; }
+@media (max-width:768px){
+  header{padding:10px 14px;gap:8px}
+  .search input{width:130px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+  .img-wrap{height:200px}
+  h3{font-size:15px}
+  .price{font-size:17px}
+  .btn{padding:10px 12px}
+  .size{width:32px;height:32px;font-size:13px}
+  #actionToast{font-size:14px;padding:8px 12px}
+}
+@media (max-width:480px){
+  .grid{grid-template-columns:1fr}
+  .img-wrap{height:240px}
+  h3{font-size:16px}
+  .price{font-size:18px}
+}
 </style>
 </head>
 <body>
+
 <header>
   <div class="brand">
     <div style="display:flex;align-items:center;gap:10px">
@@ -82,6 +97,7 @@
 <div id="actionToast"></div>
 <main><section class="grid" id="grid"></section></main>
 
+<!-- Modal -->
 <div id="modalBack" class="modal-back">
   <div class="modal">
     <h3>➕ Agregar producto</h3>
@@ -108,7 +124,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-firestore-compat.js"></script>
 
 <script>
-  // Configuración Firebase
+  // 🔹 Config Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyDLFzoe0nVSF-GKEIX2EU26DQzS69kTYYM",
     authDomain: "catalogo-yakisita.firebaseapp.com",
@@ -136,29 +152,27 @@
   const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1593032457866-9e2b1a9e24b3?auto=format&fit=crop&w=1000&q=80";
 
   // Bloqueo si no hay login
-  if(localStorage.getItem("logeado") !== "true"){
-    window.location.href = "index.html";
-  }
+  if(localStorage.getItem("logeado") !== "true") window.location.href="index.html";
 
   function showActionToast(msg){
     actionToast.textContent = msg;
-    actionToast.style.display = "block";
-    setTimeout(()=>{ actionToast.style.display = "none"; },3000);
+    actionToast.style.display="block";
+    setTimeout(()=>{actionToast.style.display="none";},3000);
   }
 
-  // Renderizar productos
+  // Render productos
   function render(products){
     grid.innerHTML = '';
     let list = products.slice();
     const q = searchInput.value.trim().toLowerCase();
     if(q) list = list.filter(p => (p.name+p.brand).toLowerCase().includes(q));
     const ord = orderSelect.value;
-    if(ord === 'priceAsc') list.sort((a,b)=>a.price-b.price);
-    if(ord === 'priceDesc') list.sort((a,b)=>b.price-a.price);
-    if(ord === 'name') list.sort((a,b)=>a.name.localeCompare(b.name));
+    if(ord==='priceAsc') list.sort((a,b)=>a.price-b.price);
+    if(ord==='priceDesc') list.sort((a,b)=>b.price-a.price);
+    if(ord==='name') list.sort((a,b)=>a.name.localeCompare(b.name));
 
     list.forEach(p=>{
-      const card = document.createElement('article');
+      const card=document.createElement('article');
       card.className='card';
       const tag = p.tag ? `<div class="label">${p.tag}</div>` : '';
       card.innerHTML = `
@@ -191,7 +205,7 @@
       };
     });
 
-    // Borrar producto
+    // Eliminar
     document.querySelectorAll('.btn-delete').forEach(b=>{
       b.onclick = async () => {
         if(!confirm('¿Seguro que quieres eliminar este producto?')) return;
@@ -204,28 +218,26 @@
 
   // Escuchar cambios en Firestore
   productsCollection.onSnapshot(snapshot=>{
-    const products = [];
-    snapshot.forEach(doc=>{
-      products.push({...doc.data(), id: doc.id});
-    });
+    const products=[];
+    snapshot.forEach(doc=>{products.push({...doc.data(),id:doc.id});});
     render(products);
   });
 
   // Modal
-  openAddBtn.onclick = () => { modalBack.style.display = 'flex'; }
-  cancelAddBtn.onclick = () => { modalBack.style.display = 'none'; }
+  openAddBtn.onclick = ()=>{ modalBack.style.display='flex'; }
+  cancelAddBtn.onclick = ()=>{ modalBack.style.display='none'; }
 
-  // Vista previa de imagen
+  // Vista previa
   fileInput.onchange = function(){
     const f = this.files[0];
     if(!f){ previewImg.style.display='none'; return; }
     const reader = new FileReader();
-    reader.onload = e => { previewImg.src = e.target.result; previewImg.style.display='block'; };
+    reader.onload=e=>{ previewImg.src=e.target.result; previewImg.style.display='block'; };
     reader.readAsDataURL(f);
   }
 
   // Guardar producto
-  saveAddBtn.onclick = async function(){
+  saveAddBtn.onclick=async function(){
     const brand = document.getElementById('f_brand').value || "D'Mirella";
     const name = document.getElementById('f_name').value;
     if(!name) return alert('Falta el nombre');
@@ -242,15 +254,13 @@
   };
 
   // Logout
-  logoutBtn.onclick = () => {
+  logoutBtn.onclick=()=>{
     if(confirm("¿Seguro que quieres cerrar sesión?")){
       localStorage.removeItem("logeado");
-      window.location.href = "index.html";
+      window.location.href="index.html";
     }
   };
-
-  searchInput.oninput = () => {};
-  orderSelect.onchange = () => {};
 </script>
+
 </body>
 </html>
