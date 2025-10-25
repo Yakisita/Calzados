@@ -1,271 +1,322 @@
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Yakisita — Catálogo Dama (Mobile-ready)</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Yakisita — Catálogo Dama (Mobile-ready)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0f10;
+  --panel:#0b0b0c;
+  --card:#111214;
+  --muted:#bdbdbd;
+  --accent:#f7c948;
+  --primary:#ff6b6b;
+  --success:#34d399;
+  --glass: rgba(255,255,255,0.04);
+  --danger:#ff4d4f;
+}
+*{box-sizing:border-box;font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
+body{margin:0;background:linear-gradient(180deg,#080808 0%, #0f0f10 100%);color:#fff;min-height:100vh}
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+/* Header */
+header{
+  background:var(--panel);
+  border-bottom:1px solid rgba(255,255,255,0.03);
+  padding:12px 20px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  position:sticky;
+  top:0;
+  z-index:60;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{ font-weight:800;font-size:20px;color:#ff78a0;letter-spacing:0.4px }
+.brand-sub{font-size:13px;color:var(--muted);font-weight:600}
+.spacer{flex:1}
+.controls{display:flex;gap:12px;align-items:center}
+.search{ display:flex;align-items:center;background:#0b0b0c;padding:8px;border-radius:999px;border:1px solid rgba(255,255,255,0.03); min-width:240px; gap:8px }
+.search input{background:transparent;border:0;outline:0;color:#fff;padding:6px 6px;width:180px}
+.select{ background:#0b0b0c;color:var(--muted);border:1px solid rgba(255,255,255,0.03);padding:8px 10px;border-radius:10px }
+.btn-logout{background:#fff;color:#0b0b0c;padding:8px 12px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+.btn-add{background:var(--primary);color:#111;padding:8px 12px;border-radius:10px;border:0;font-weight:800;cursor:pointer}
 
-  <style>
-    :root{
-      --bg:#0f0f10;
-      --panel:#0b0b0c;
-      --card:#111214;
-      --muted:#bdbdbd;
-      --accent:#f7c948;
-      --primary:#ff6b6b;
-      --success:#34d399;
-      --glass: rgba(255,255,255,0.04);
-      --danger:#ff4d4f;
-    }
-    *{box-sizing:border-box;font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
-    body{margin:0;background:linear-gradient(180deg,#080808 0%, #0f0f10 100%);color:#fff;min-height:100vh}
+/* Catalog */
+main{padding:12px 20px 40px;max-width:1200px;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,0.03);
+  position:relative;overflow:hidden; box-shadow:0 6px 18px rgba(2,6,23,0.6)
+}
+.label{ position:absolute;left:12px;top:12px;background:var(--accent);color:#111;padding:6px 8px;border-radius:8px;font-weight:700;font-size:12px }
+.img-wrap{height:180px;border-radius:10px;overflow:hidden;background:#0a0a0a;display:flex;align-items:center;justify-content:center}
+.img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.brand-name{font-size:12px;color:var(--muted);margin-top:10px}
+h3{margin:6px 0 8px 0;font-size:16px;color:#fff}
+.tallas{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px}
+.size{ width:34px;height:34px;border-radius:50%;display:inline-grid;place-items:center;background:#0b0b0c;color:var(--muted); border:1px solid rgba(255,255,255,0.04);cursor:default;font-weight:700 }
+.price{margin-top:10px;font-weight:800;color:var(--accent);font-size:18px}
+.card-footer{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
+.btn{ padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700; }
+.btn-qr{background:var(--success);color:#041014}
+.btn-edit{background:#ffd166;color:#111}
+.btn-delete{background:var(--danger);color:#fff}
+.qr-canvas{display:block;margin-top:10px}
 
-    /* Header */
-    header{
-      background:var(--panel);
-      border-bottom:1px solid rgba(255,255,255,0.03);
-      padding:12px 20px;
-      display:flex;
-      align-items:center;
-      gap:16px;
-      position:sticky;
-      top:0;
-      z-index:60;
-    }
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{ font-weight:800;font-size:20px;color:#ff78a0;letter-spacing:0.4px }
-    .brand-sub{font-size:13px;color:var(--muted);font-weight:600}
-    .spacer{flex:1}
-    .controls{display:flex;gap:12px;align-items:center}
-    .search{ display:flex;align-items:center;background:#0b0b0c;padding:8px;border-radius:999px;border:1px solid rgba(255,255,255,0.03); min-width:240px; gap:8px }
-    .search input{background:transparent;border:0;outline:0;color:#fff;padding:6px 6px;width:180px}
-    .select{ background:#0b0b0c;color:var(--muted);border:1px solid rgba(255,255,255,0.03);padding:8px 10px;border-radius:10px }
-    .btn-logout{background:#fff;color:#0b0b0c;padding:8px 12px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
-    .btn-add{background:var(--primary);color:#111;padding:8px 12px;border-radius:10px;border:0;font-weight:800;cursor:pointer}
+/* modal add product */
+.modal-back{ position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:120 }
+.modal{ width:420px; max-width:94%; background:#0b0b0c; padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.04); box-shadow:0 8px 30px rgba(0,0,0,0.6) }
+.modal h3{ margin-bottom:8px; color:#fff }
+.field{ display:flex; flex-direction:column; gap:6px; margin-bottom:10px }
+.field input, .field textarea, .field select{ padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:#fff; outline:none }
+.modal-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:6px }
+.btn-cancel{ background:#222; color:var(--muted); padding:8px 12px; border-radius:8px; border:0; cursor:pointer }
+.btn-save{ background:var(--success); color:#041014; padding:8px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:800 }
+.img-preview{ width:100%; height:160px; object-fit:cover; border-radius:8px; background:#090909; display:block }
+.small-muted{ font-size:12px;color:var(--muted) }
 
-    /* Catalog */
-    main{padding:12px 20px 40px;max-width:1200px;margin:0 auto}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
-    .card{
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,0.03);
-      position:relative;overflow:hidden; box-shadow:0 6px 18px rgba(2,6,23,0.6)
-    }
-    .label{ position:absolute;left:12px;top:12px;background:var(--accent);color:#111;padding:6px 8px;border-radius:8px;font-weight:700;font-size:12px }
-    .img-wrap{height:180px;border-radius:10px;overflow:hidden;background:#0a0a0a;display:flex;align-items:center;justify-content:center}
-    .img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
-    .brand-name{font-size:12px;color:var(--muted);margin-top:10px}
-    h3{margin:6px 0 8px 0;font-size:16px;color:#fff}
-    .tallas{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px}
-    .size{ width:34px;height:34px;border-radius:50%;display:inline-grid;place-items:center;background:#0b0b0c;color:var(--muted); border:1px solid rgba(255,255,255,0.04);cursor:default;font-weight:700 }
-    .price{margin-top:10px;font-weight:800;color:var(--accent);font-size:18px}
-    .card-footer{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
-    .btn{ padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700; }
-    .btn-qr{background:var(--success);color:#041014}
-    .btn-edit{background:#ffd166;color:#111}
-    .btn-delete{background:var(--danger);color:#fff}
-    .qr-canvas{display:block;margin-top:10px}
+/* toast bajo header */
+#actionToast { max-width:1200px; margin:12px auto 0; display:none; padding:10px 14px; border-radius:8px; text-align:center; font-weight:700; color:#fff; background:rgba(11,11,11,0.8); border:1px solid rgba(255,255,255,0.04); z-index:70; }
 
-    /* modal add product */
-    .modal-back{ position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:120 }
-    .modal{ width:420px; max-width:94%; background:#0b0b0c; padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.04); box-shadow:0 8px 30px rgba(0,0,0,0.6) }
-    .modal h3{ margin-bottom:8px; color:#fff }
-    .field{ display:flex; flex-direction:column; gap:6px; margin-bottom:10px }
-    .field input, .field textarea, .field select{ padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:#fff; outline:none }
-    .modal-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:6px }
-    .btn-cancel{ background:#222; color:var(--muted); padding:8px 12px; border-radius:8px; border:0; cursor:pointer }
-    .btn-save{ background:var(--success); color:#041014; padding:8px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:800 }
-    .img-preview{ width:100%; height:160px; object-fit:cover; border-radius:8px; background:#090909; display:block }
-    .small-muted{ font-size:12px;color:var(--muted) }
-
-    /* toast bajo header */
-    #actionToast { max-width:1200px; margin:12px auto 0; display:none; padding:10px 14px; border-radius:8px; text-align:center; font-weight:700; color:#fff; background:rgba(11,11,11,0.8); border:1px solid rgba(255,255,255,0.04); z-index:70; }
-
-    /* responsive mobile */
-    @media (max-width:768px){
-      header{padding:10px 14px;gap:8px}
-      .search input{width:130px}
-      .grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
-      .img-wrap{height:200px}
-      h3{font-size:15px}
-      .price{font-size:17px}
-      .btn{padding:10px 12px}
-      .size{width:32px;height:32px;font-size:13px}
-      #actionToast{font-size:14px;padding:8px 12px}
-    }
-    @media (max-width:480px){
-      .grid{grid-template-columns:1fr}
-      .img-wrap{height:240px}
-      h3{font-size:16px}
-      .price{font-size:18px}
-    }
-  </style>
+/* responsive mobile */
+@media (max-width:768px){
+  header{padding:10px 14px;gap:8px}
+  .search input{width:130px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+  .img-wrap{height:200px}
+  h3{font-size:15px}
+  .price{font-size:17px}
+  .btn{padding:10px 12px}
+  .size{width:32px;height:32px;font-size:13px}
+  #actionToast{font-size:14px;padding:8px 12px}
+}
+@media (max-width:480px){
+  .grid{grid-template-columns:1fr}
+  .img-wrap{height:240px}
+  h3{font-size:16px}
+  .price{font-size:18px}
+}
+</style>
 </head>
 <body>
-  <header>
-    <div class="brand">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div class="logo">Yakisita💞</div>
-        <div class="brand-sub">D'Mirella — Dama</div>
-      </div>
-    </div>
-    <div class="spacer"></div>
-    <div class="controls">
-      <div class="search">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="11" r="6" stroke="#9CA3AF" stroke-width="2"/></svg>
-        <input id="search" placeholder="Buscar producto..." />
-      </div>
-      <select id="order" class="select">
-        <option value="default">Ordenar por</option>
-        <option value="priceAsc">Precio: menor</option>
-        <option value="priceDesc">Precio: mayor</option>
-        <option value="name">Nombre</option>
-      </select>
-      <button class="btn btn-add" id="openAdd">➕ Agregar producto</button>
-      <button class="btn btn-logout" id="logoutBtn">Cerrar sesión</button>
-    </div>
-  </header>
-
-  <div id="actionToast"></div>
-  <main><section class="grid" id="grid"></section></main>
-
-  <!-- Modal -->
-  <div id="modalBack" class="modal-back">
-    <div class="modal">
-      <h3>➕ Agregar producto</h3>
-      <div class="field"><label class="small-muted">Etiqueta</label><input id="f_tag" placeholder="OFERTA" /></div>
-      <div class="field"><label class="small-muted">Marca</label><input id="f_brand" placeholder="D'Mirella" /></div>
-      <div class="field"><label class="small-muted">Nombre</label><input id="f_name" placeholder="Sandalias" /></div>
-      <div class="field"><label class="small-muted">Precio</label><input id="f_price" type="number" placeholder="40" /></div>
-      <div class="field"><label class="small-muted">Tallas (35,36,37)</label><input id="f_sizes" /></div>
-      <div class="field">
-        <label class="small-muted">Imagen (opcional)</label>
-        <!-- Eliminado capture="environment" para permitir galería en móviles -->
-        <input id="f_file" type="file" accept="image/*" />
-        <img id="f_preview" class="img-preview" style="display:none;margin-top:8px" />
-      </div>
-      <div class="modal-actions">
-        <button id="cancelAdd" class="btn-cancel">Cancelar</button>
-        <button id="saveAdd" class="btn-save">Guardar</button>
-      </div>
-    </div>
+<header>
+<div class="brand">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="logo">Yakisita💞</div>
+    <div class="brand-sub">D'Mirella — Dama</div>
   </div>
+</div>
+<div class="spacer"></div>
+<div class="controls">
+  <div class="search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="11" r="6" stroke="#9CA3AF" stroke-width="2"/></svg>
+    <input id="search" placeholder="Buscar producto..." />
+  </div>
+  <select id="order" class="select">
+    <option value="default">Ordenar por</option>
+    <option value="priceAsc">Precio: menor</option>
+    <option value="priceDesc">Precio: mayor</option>
+    <option value="name">Nombre</option>
+  </select>
+  <button class="btn btn-add" id="openAdd">➕ Agregar producto</button>
+  <button class="btn btn-logout" id="logoutBtn">Cerrar sesión</button>
+</div>
+</header>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-  <script>
-    if(localStorage.getItem("logeado")!=="true"){window.location.href="index.html";}
+<div id="actionToast"></div>
+<main>
+  <section class="grid" id="grid"></section>
+</main>
 
-    const LS_KEY='yakisita_products_v1';
-    const DEFAULT_IMAGE='https://images.unsplash.com/photo-1593032457866-9e2b1a9e24b3?auto=format&fit=crop&w=1000&q=80';
-    const canEdit=()=>localStorage.getItem('logeado')==='true';
+<!-- Modal -->
+<div id="modalBack" class="modal-back">
+<div class="modal">
+  <h3>➕ Agregar producto</h3>
+  <div class="field"><label class="small-muted">Etiqueta</label><input id="f_tag" placeholder="OFERTA" /></div>
+  <div class="field"><label class="small-muted">Marca</label><input id="f_brand" placeholder="D'Mirella" /></div>
+  <div class="field"><label class="small-muted">Nombre</label><input id="f_name" placeholder="Sandalias" /></div>
+  <div class="field"><label class="small-muted">Precio</label><input id="f_price" type="number" placeholder="40" /></div>
+  <div class="field"><label class="small-muted">Tallas (35,36,37)</label><input id="f_sizes" /></div>
+  <div class="field">
+    <label class="small-muted">Imagen (opcional)</label>
+    <input id="f_file" type="file" accept="image/*" />
+    <img id="f_preview" class="img-preview" style="display:none;margin-top:8px" />
+  </div>
+  <div class="modal-actions">
+    <button id="cancelAdd" class="btn-cancel">Cancelar</button>
+    <button id="saveAdd" class="btn-save">Guardar</button>
+  </div>
+</div>
+</div>
 
-    const defaultProducts=[
-      {id:'p1',tag:'OFERTA',brand:"D'Mirella",name:'Sandalias de verano',price:40,priceLabel:'S/ 40.00',sizes:['35','36','37'],img:DEFAULT_IMAGE},
-      {id:'p2',tag:'NUEVO',brand:"D'Mirella",name:'Sandalias urbanas',price:50,priceLabel:'S/ 50.00',sizes:['36','37','38'],img:'https://images.unsplash.com/photo-1600185361264-7d0c8d1a60e5?auto=format&fit=crop&w=1000&q=80'}
-    ];
-    let saved=JSON.parse(localStorage.getItem(LS_KEY))||[];
-    const map=new Map(saved.map(p=>[p.id,p]));
-    defaultProducts.forEach(d=>{if(!map.has(d.id))map.set(d.id,d);});
-    let products=Array.from(map.values());
-    localStorage.setItem(LS_KEY,JSON.stringify(products));
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<script>
+if(localStorage.getItem("logeado")!=="true"){window.location.href="index.html";}
 
-    const grid=document.getElementById('grid');
-    const searchInput=document.getElementById('search');
-    const orderSelect=document.getElementById('order');
-    const logoutBtn=document.getElementById('logoutBtn');
-    const openAddBtn=document.getElementById('openAdd');
-    const modalBack=document.getElementById('modalBack');
-    const saveAddBtn=document.getElementById('saveAdd');
-    const cancelAddBtn=document.getElementById('cancelAdd');
-    const fileInput=document.getElementById('f_file');
-    const previewImg=document.getElementById('f_preview');
-    const actionToast=document.getElementById('actionToast');
+const LS_KEY='yakisita_products_v1';
+const DEFAULT_IMAGE='https://images.unsplash.com/photo-1593032457866-9e2b1a9e24b3?auto=format&fit=crop&w=1000&q=80';
+const canEdit=()=>localStorage.getItem('logeado')==='true';
 
-    function saveProducts(){localStorage.setItem(LS_KEY,JSON.stringify(products));}
-    function showActionToast(msg){actionToast.textContent=msg;actionToast.style.display='block';setTimeout(()=>{actionToast.style.display='none';},3000);}
+const defaultProducts=[
+  {id:'p1',tag:'OFERTA',brand:"D'Mirella",name:'Sandalias de verano',price:40,priceLabel:'S/ 40.00',sizes:['35','36','37'],img:DEFAULT_IMAGE},
+  {id:'p2',tag:'NUEVO',brand:"D'Mirella",name:'Sandalias urbanas',price:50,priceLabel:'S/ 50.00',sizes:['36','37','38'],img:'https://images.unsplash.com/photo-1600185361264-7d0c8d1a60e5?auto=format&fit=crop&w=1000&q=80'}
+];
+let saved=JSON.parse(localStorage.getItem(LS_KEY))||[];
+const map=new Map(saved.map(p=>[p.id,p]));
+defaultProducts.forEach(d=>{if(!map.has(d.id))map.set(d.id,d);});
+let products=Array.from(map.values());
+localStorage.setItem(LS_KEY,JSON.stringify(products));
 
-    function render(){
-      grid.innerHTML='';
-      let list=products.slice();
-      const q=searchInput.value.trim().toLowerCase();
-      if(q)list=list.filter(p=>(p.name+p.brand).toLowerCase().includes(q));
-      const ord=orderSelect.value;
-      if(ord==='priceAsc')list.sort((a,b)=>a.price-b.price);
-      if(ord==='priceDesc')list.sort((a,b)=>b.price-a.price);
-      if(ord==='name')list.sort((a,b)=>a.name.localeCompare(b.name));
-      list.forEach(p=>{
-        const card=document.createElement('article');
-        card.className='card';
-        const tag=p.tag?`<div class="label">${p.tag}</div>`:'';
-        const editBtn=canEdit()?`<button class="btn btn-edit" data-id="${p.id}">Editar</button>`:'';
-        const deleteBtn=canEdit()?`<button class="btn btn-delete" data-id="${p.id}">🗑️</button>`:'';
-        card.innerHTML=`
-          ${tag}
-          <div class="img-wrap"><img src="${p.img||DEFAULT_IMAGE}" alt="${p.name}" /></div>
-          <div class="brand-name">${p.brand}</div>
-          <h3>${p.name}</h3>
-          <div class="tallas">${p.sizes.map(s=>`<div class='size'>${s}</div>`).join('')}</div>
-          <div class="price">${p.priceLabel}</div>
-          <div class="card-footer">
-            <div style="display:flex;gap:6px;">
-              <button class="btn btn-qr" data-id="${p.id}">Ver QR</button>
-              ${editBtn}${deleteBtn}
-            </div>
-          </div>
-          <canvas id="qrcanvas-${p.id}" class="qr-canvas" style="display:none"></canvas>
-        `;
-        grid.appendChild(card);
-      });
+const grid=document.getElementById('grid');
+const searchInput=document.getElementById('search');
+const orderSelect=document.getElementById('order');
+const logoutBtn=document.getElementById('logoutBtn');
+const openAddBtn=document.getElementById('openAdd');
+const modalBack=document.getElementById('modalBack');
+const saveAddBtn=document.getElementById('saveAdd');
+const cancelAddBtn=document.getElementById('cancelAdd');
+const fileInput=document.getElementById('f_file');
+const previewImg=document.getElementById('f_preview');
+const actionToast=document.getElementById('actionToast');
 
-      document.querySelectorAll('.btn-qr').forEach(b=>{
-        b.onclick=()=>{
-          const id=b.dataset.id;
-          const canvas=document.getElementById('qrcanvas-'+id);
-          if(canvas.style.display==='none'){new QRious({element:canvas,value:location.origin+location.pathname+'?product='+id,size:140});canvas.style.display='block';}
-          else canvas.style.display='none';
-        };
-      });
-      document.querySelectorAll('.btn-edit').forEach(b=>b.onclick=()=>openEditor(b.dataset.id));
-      document.querySelectorAll('.btn-delete').forEach(b=>b.onclick=()=>{
-        if(!confirm('¿Seguro que quieres eliminar este producto?'))return;
-        const id=b.dataset.id;products=products.filter(x=>x.id!==id);saveProducts();render();showActionToast('Producto eliminado');
-      });
-    }
+let currentPage = 1;
+const itemsPerPage = 10;
 
-    function openEditor(id){
-      const i=products.findIndex(x=>x.id===id);if(i===-1)return;
-      const val=prompt('Editar tallas separadas por coma:',products[i].sizes.join(','));if(val===null)return;
-      products[i].sizes=val.split(',').map(s=>s.trim()).filter(Boolean);saveProducts();render();showActionToast('Tallas actualizadas');
-    }
+function saveProducts(){localStorage.setItem(LS_KEY,JSON.stringify(products));}
+function showActionToast(msg){actionToast.textContent=msg;actionToast.style.display='block';setTimeout(()=>{actionToast.style.display='none';},3000);}
 
-    openAddBtn.onclick=()=>{modalBack.style.display='flex';}
-    cancelAddBtn.onclick=()=>{modalBack.style.display='none';}
-    fileInput.onchange=function(){const f=this.files[0];if(!f){previewImg.style.display='none';return;}const r=new FileReader();r.onload=e=>{previewImg.src=e.target.result;previewImg.style.display='block';};r.readAsDataURL(f);}
-    saveAddBtn.onclick=function(){
-      const brand=document.getElementById('f_brand').value||"D'Mirella";
-      const name=document.getElementById('f_name').value;
-      if(!name)return alert('Falta el nombre');
-      const price=Number(document.getElementById('f_price').value||0);
-      const tag=document.getElementById('f_tag').value;
-      const sizes=document.getElementById('f_sizes').value.split(',').map(s=>s.trim()).filter(Boolean);
-      const img=previewImg.src||DEFAULT_IMAGE;
-      const p={id:'p'+Date.now(),brand,name,price,priceLabel:'S/ '+price.toFixed(2),tag,sizes,img};
-      products.push(p);saveProducts();modalBack.style.display='none';render();showActionToast('Producto agregado');
-      document.querySelectorAll('#modalBack input').forEach(i=>i.value='');previewImg.style.display='none';
+function renderPagination(totalPages){
+  let pagination = document.getElementById('pagination');
+  if(!pagination){
+    pagination = document.createElement('div');
+    pagination.id = 'pagination';
+    pagination.style.margin = '20px 0';
+    pagination.style.textAlign = 'center';
+    document.querySelector('main').appendChild(pagination);
+  }
+  pagination.innerHTML = '';
+  for(let i=1;i<=totalPages;i++){
+    const btn = document.createElement('button');
+    btn.textContent = i;
+    btn.style.margin = '0 4px';
+    btn.style.padding = '6px 10px';
+    btn.style.borderRadius = '6px';
+    btn.style.border = '1px solid #fff';
+    btn.style.background = i===currentPage ? '#ff6b6b' : 'transparent';
+    btn.style.color = '#fff';
+    btn.onclick = ()=>{currentPage=i;render();};
+    pagination.appendChild(btn);
+  }
+}
+
+function render(){
+  grid.innerHTML='';
+  let list=products.slice();
+  const q=searchInput.value.trim().toLowerCase();
+  if(q) list = list.filter(p => (p.name + p.brand).toLowerCase().includes(q));
+
+  const ord = orderSelect.value;
+  if(ord === 'priceAsc') list.sort((a,b) => a.price - b.price);
+  if(ord === 'priceDesc') list.sort((a,b) => b.price - a.price);
+  if(ord === 'name') list.sort((a,b) => a.name.localeCompare(b.name));
+
+  const totalPages = Math.ceil(list.length / itemsPerPage);
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const pagedList = list.slice(start,end);
+
+  pagedList.forEach(p => {
+    const card=document.createElement('article');
+    card.className='card';
+    const tag=p.tag ? `<div class="label">${p.tag}</div>` : '';
+    const editBtn = canEdit() ? `<button class="btn btn-edit" data-id="${p.id}">Editar</button>` : '';
+    const deleteBtn = canEdit() ? `<button class="btn btn-delete" data-id="${p.id}">🗑️</button>` : '';
+    card.innerHTML=`
+      ${tag}
+      <div class="img-wrap"><img src="${p.img||DEFAULT_IMAGE}" alt="${p.name}" /></div>
+      <div class="brand-name">${p.brand}</div>
+      <h3>${p.name}</h3>
+      <div class="tallas">${p.sizes.map(s=>`<div class='size'>${s}</div>`).join('')}</div>
+      <div class="price">${p.priceLabel}</div>
+      <div class="card-footer">
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-qr" data-id="${p.id}">Ver QR</button>
+          ${editBtn}${deleteBtn}
+        </div>
+      </div>
+      <canvas id="qrcanvas-${p.id}" class="qr-canvas" style="display:none"></canvas>
+    `;
+    grid.appendChild(card);
+  });
+
+  document.querySelectorAll('.btn-qr').forEach(b=>{
+    b.onclick=()=>{
+      const id=b.dataset.id;
+      const canvas=document.getElementById('qrcanvas-'+id);
+      if(canvas.style.display==='none'){
+        new QRious({element:canvas,value:location.origin+location.pathname+'?product='+id,size:140});
+        canvas.style.display='block';
+      } else canvas.style.display='none';
     };
-
-    logoutBtn.onclick=()=>{
-      if(confirm("¿Seguro que quieres cerrar sesión?")){
-        localStorage.removeItem("logeado");
-        window.location.href="index.html";
-      }
+  });
+  document.querySelectorAll('.btn-edit').forEach(b=>b.onclick=()=>openEditor(b.dataset.id));
+  document.querySelectorAll('.btn-delete').forEach(b=>{
+    b.onclick=()=>{
+      if(!confirm('¿Seguro que quieres eliminar este producto?')) return;
+      const id=b.dataset.id;
+      products = products.filter(x => x.id !== id);
+      saveProducts();
+      render();
+      showActionToast('Producto eliminado');
     };
+  });
 
-    searchInput.oninput=()=>render();
-    orderSelect.onchange=()=>render();
-    render();
-  </script>
+  renderPagination(totalPages);
+}
+
+function openEditor(id){
+  const i=products.findIndex(x=>x.id===id);if(i===-1)return;
+  const val=prompt('Editar tallas separadas por coma:',products[i].sizes.join(','));if(val===null)return;
+  products[i].sizes=val.split(',').map(s=>s.trim()).filter(Boolean);
+  saveProducts();
+  render();
+  showActionToast('Tallas actualizadas');
+}
+
+openAddBtn.onclick=()=>{modalBack.style.display='flex';}
+cancelAddBtn.onclick=()=>{modalBack.style.display='none';}
+fileInput.onchange=function(){const f=this.files[0];if(!f){previewImg.style.display='none';return;}const r=new FileReader();r.onload=e=>{previewImg.src=e.target.result;previewImg.style.display='block';};r.readAsDataURL(f);}
+saveAddBtn.onclick=function(){
+  const brand=document.getElementById('f_brand').value||"D'Mirella";
+  const name=document.getElementById('f_name').value;
+  if(!name)return alert('Falta el nombre');
+  const price=Number(document.getElementById('f_price').value||0);
+  const tag=document.getElementById('f_tag').value;
+  const sizes=document.getElementById('f_sizes').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const img=previewImg.src||DEFAULT_IMAGE;
+  const p={id:'p'+Date.now(),brand,name,price,priceLabel:'S/ '+price.toFixed(2),tag,sizes,img};
+  products.push(p);
+  saveProducts();
+  modalBack.style.display='none';
+  render();
+  showActionToast('Producto agregado');
+  document.querySelectorAll('#modalBack input').forEach(i=>i.value='');
+  previewImg.style.display='none';
+};
+
+logoutBtn.onclick=()=>{
+  if(confirm("¿Seguro que quieres cerrar sesión?")){
+    localStorage.removeItem("logeado");
+    window.location.href="index.html";
+  }
+};
+
+searchInput.oninput=()=>{currentPage=1; render();}
+orderSelect.onchange=()=>{currentPage=1; render();}
+render();
+</script>
 </body>
 </html>
 
