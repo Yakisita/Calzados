@@ -161,9 +161,9 @@ h3{margin:6px 0 8px 0;font-size:16px;color:#fff}
     </div>
 
     <div class="field">
-      <label class="small-muted">Imagen (opcional)</label>
+      <label class="small-muted">Imagen (sube o pega URL)</label>
       <input id="f_file" type="file" accept="image/*" />
-      <input id="f_url" type="text" placeholder="Pegar URL de la imagen" style="margin-top:6px;" />
+      <input id="f_url" type="text" placeholder="Pegar URL o enlace de Google Drive" style="margin-top:6px;" />
       <img id="f_preview" class="img-preview" style="display:none;margin-top:8px" />
     </div>
 
@@ -196,6 +196,14 @@ const actionToast=document.getElementById('actionToast');
 
 function saveProducts(){localStorage.setItem(LS_KEY,JSON.stringify(products));}
 function showActionToast(msg){actionToast.textContent=msg;actionToast.style.display='block';setTimeout(()=>{actionToast.style.display='none';},3000);}
+
+function convertirDriveURL(url){
+  const match = url.match(/\/d\/(.*?)\//);
+  if(match && match[1]){
+    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  }
+  return url;
+}
 
 function render(){
   grid.innerHTML='';
@@ -251,7 +259,7 @@ function render(){
 openAddBtn.onclick=()=>{modalBack.style.display='flex';}
 cancelAddBtn.onclick=()=>{modalBack.style.display='none';}
 
-// Subida archivo
+// Subir archivo
 fileInput.onchange=function(){
   const f=this.files[0];
   if(!f){ previewImg.style.display='none'; return; }
@@ -264,10 +272,11 @@ fileInput.onchange=function(){
   reader.readAsDataURL(f);
 };
 
-// URL
+// Pegar URL (conversión automática si es de Google Drive)
 urlInput.oninput=function(){
-  const val=this.value.trim();
+  let val=this.value.trim();
   if(val){
+    val = convertirDriveURL(val);
     previewImg.src=val;
     previewImg.style.display='block';
     fileInput.value='';
@@ -305,4 +314,3 @@ render();
 </script>
 </body>
 </html>
-
