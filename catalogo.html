@@ -52,18 +52,32 @@ main{padding:12px 20px 40px;max-width:1200px;margin:0 auto}
   position:relative;overflow:hidden; box-shadow:0 6px 18px rgba(2,6,23,0.6)
 }
 .label{ position:absolute;left:12px;top:12px;background:var(--accent);color:#111;padding:6px 8px;border-radius:8px;font-weight:700;font-size:12px }
-.img-wrap{height:180px;border-radius:10px;overflow:hidden;background:#0a0a0a;display:flex;align-items:center;justify-content:center}
-.img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.img-wrap{
+  height:180px;
+  border-radius:10px;
+  overflow:hidden;
+  background:#0a0a0a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.img-wrap img{
+  width:100%;
+  height:100%;
+  object-fit:contain; 
+  background-color:#0a0a0a; 
+  display:block;
+}
 .brand-name{font-size:12px;color:var(--muted);margin-top:10px}
 h3{margin:6px 0 8px 0;font-size:16px;color:#fff}
 .tallas{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px}
-.size{ width:34px;height:34px;border-radius:50%;display:inline-grid;place-items:center;background:#0b0b0c;color:var(--muted); border:1px solid rgba(255,255,255,0.04);cursor:default;font-weight:700 }
+.size{ width:34px;height:34px;border-radius:50%;display:inline-grid;place-items:center;background:#0b0b0c;color:var(--muted); border:1px solid rgba(255,255,255,0.04);cursor:pointer;font-weight:700 }
 .price{margin-top:10px;font-weight:800;color:var(--accent);font-size:18px}
 .card-footer{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
 .btn{ padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700; }
 .btn-qr{background:var(--success);color:#041014}
 .btn-edit{background:#ffd166;color:#111}
-.btn-delete{background:var(--danger);color:#fff}
+.btn-delete{background:#danger;color:#fff}
 .qr-canvas{display:block;margin-top:10px}
 
 /* modal add product */
@@ -75,7 +89,7 @@ h3{margin:6px 0 8px 0;font-size:16px;color:#fff}
 .modal-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:6px }
 .btn-cancel{ background:#222; color:var(--muted); padding:8px 12px; border-radius:8px; border:0; cursor:pointer }
 .btn-save{ background:var(--success); color:#041014; padding:8px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:800 }
-.img-preview{ width:100%; height:160px; object-fit:cover; border-radius:8px; background:#090909; display:block }
+.img-preview{ width:100%; height:160px; object-fit:contain; border-radius:8px; background:#090909; display:block }
 .small-muted{ font-size:12px;color:var(--muted) }
 
 /* toast bajo header */
@@ -113,7 +127,6 @@ h3{margin:6px 0 8px 0;font-size:16px;color:#fff}
   <div class="spacer"></div>
   <div class="controls">
     <div class="search">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="11" r="6" stroke="#9CA3AF" stroke-width="2"/></svg>
       <input id="search" placeholder="Buscar producto..." />
     </div>
     <select id="order" class="select">
@@ -163,7 +176,7 @@ h3{margin:6px 0 8px 0;font-size:16px;color:#fff}
     <div class="field">
       <label class="small-muted">Imagen (sube o pega URL)</label>
       <input id="f_file" type="file" accept="image/*" />
-      <input id="f_url" type="text" placeholder="Pegar URL o enlace de Google Drive" style="margin-top:6px;" />
+      <input id="f_url" type="text" placeholder="Pegar URL o enlace de imagen" style="margin-top:6px;" />
       <img id="f_preview" class="img-preview" style="display:none;margin-top:8px" />
     </div>
 
@@ -197,10 +210,11 @@ const actionToast=document.getElementById('actionToast');
 function saveProducts(){localStorage.setItem(LS_KEY,JSON.stringify(products));}
 function showActionToast(msg){actionToast.textContent=msg;actionToast.style.display='block';setTimeout(()=>{actionToast.style.display='none';},3000);}
 
+// Convertir Drive URL a enlace directo
 function convertirDriveURL(url){
-  const match = url.match(/\/d\/(.*?)\//);
-  if(match && match[1]){
-    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  if(url.includes("drive.google.com")){
+    const match=url.match(/\/d\/(.*?)\//);
+    if(match && match[1]) return `https://drive.google.com/uc?export=view&id=${match[1]}`;
   }
   return url;
 }
@@ -209,11 +223,12 @@ function render(){
   grid.innerHTML='';
   let list=products.slice();
   const q=searchInput.value.trim().toLowerCase();
-  if(q)list=list.filter(p=>(p.name+p.brand).toLowerCase().includes(q));
+  if(q) list=list.filter(p=>(p.name+p.brand).toLowerCase().includes(q));
   const ord=orderSelect.value;
-  if(ord==='priceAsc')list.sort((a,b)=>a.price-b.price);
-  if(ord==='priceDesc')list.sort((a,b)=>b.price-a.price);
-  if(ord==='name')list.sort((a,b)=>a.name.localeCompare(b.name));
+  if(ord==='priceAsc') list.sort((a,b)=>a.price-b.price);
+  if(ord==='priceDesc') list.sort((a,b)=>b.price-a.price);
+  if(ord==='name') list.sort((a,b)=>a.name.localeCompare(b.name));
+  
   list.forEach(p=>{
     const card=document.createElement('article');
     card.className='card';
@@ -224,40 +239,65 @@ function render(){
       <div class="brand-name">${p.brand}</div>
       <h3>${p.name}</h3>
       <div class="tallas">${p.sizes.map(s=>`<div class='size'>${s}</div>`).join('')}</div>
-      <div class="price">${p.priceLabel}</div>
+      <div class="price">S/ ${p.price.toFixed(2)}</div>
       <div class="card-footer">
         <div style="display:flex;gap:6px;">
-          <button class="btn btn-qr" data-id="${p.id}">Ver QR</button>
+          <button class="btn btn-edit" data-id="${p.id}">Editar</button>
           <button class="btn btn-delete" data-id="${p.id}">🗑️</button>
+          <button class="btn btn-qr" data-id="${p.id}">QR</button>
         </div>
       </div>
-      <canvas id="qrcanvas-${p.id}" class="qr-canvas" style="display:none"></canvas>
+      <canvas class="qr-canvas" id="qr-${p.id}" style="display:none"></canvas>
     `;
     grid.appendChild(card);
   });
 
-  document.querySelectorAll('.btn-qr').forEach(b=>{
+  // Editar
+  document.querySelectorAll('.btn-edit').forEach(b=>{
     b.onclick=()=>{
-      const id=b.dataset.id;
-      const canvas=document.getElementById('qrcanvas-'+id);
-      if(canvas.style.display==='none'){new QRious({element:canvas,value:location.origin+location.pathname+'?product='+id,size:140});canvas.style.display='block';}
-      else canvas.style.display='none';
+      const p=products.find(x=>x.id===b.dataset.id);
+      if(!p) return;
+      modalBack.style.display='flex';
+      document.getElementById('f_tag').value=p.tag;
+      document.getElementById('f_brand').value=p.brand;
+      document.getElementById('f_name').value=p.name;
+      document.getElementById('f_price').value=p.price;
+      document.getElementById('f_sizes').value=p.sizes.join(',');
+      previewImg.src=p.img;
+      previewImg.style.display='block';
+      saveAddBtn.dataset.edit=p.id;
     };
   });
+
+  // Delete
   document.querySelectorAll('.btn-delete').forEach(b=>{
     b.onclick=()=>{
-      if(!confirm('¿Seguro que quieres eliminar este producto?'))return;
-      const id=b.dataset.id;
-      products=products.filter(x=>x.id!==id);
+      if(!confirm('¿Seguro que quieres eliminar este producto?')) return;
+      products=products.filter(x=>x.id!==b.dataset.id);
       saveProducts();
       render();
       showActionToast('Producto eliminado');
     };
   });
+
+  // QR
+  document.querySelectorAll('.btn-qr').forEach(b=>{
+    b.onclick=()=>{
+      const p=products.find(x=>x.id===b.dataset.id);
+      if(!p) return;
+      const canvas=document.getElementById(`qr-${p.id}`);
+      const qr = new QRious({
+        element: canvas,
+        value: `Nombre: ${p.name}\nMarca: ${p.brand}\nPrecio: S/ ${p.price.toFixed(2)}\nTallas: ${p.sizes.join(',')}`,
+        size: 120
+      });
+      canvas.style.display = canvas.style.display==='block' ? 'none' : 'block';
+    };
+  });
 }
 
-openAddBtn.onclick=()=>{modalBack.style.display='flex';}
-cancelAddBtn.onclick=()=>{modalBack.style.display='none';}
+openAddBtn.onclick=()=>{modalBack.style.display='flex'; delete saveAddBtn.dataset.edit;};
+cancelAddBtn.onclick=()=>{modalBack.style.display='none';};
 
 // Subir archivo
 fileInput.onchange=function(){
@@ -272,17 +312,18 @@ fileInput.onchange=function(){
   reader.readAsDataURL(f);
 };
 
-// Pegar URL (conversión automática si es de Google Drive)
+// Pegar URL
 urlInput.oninput=function(){
   let val=this.value.trim();
   if(val){
-    val = convertirDriveURL(val);
+    val=convertirDriveURL(val);
     previewImg.src=val;
     previewImg.style.display='block';
     fileInput.value='';
   } else previewImg.style.display='none';
 };
 
+// Guardar producto
 saveAddBtn.onclick=function(){
   const brand=document.getElementById('f_brand').value||"D'Mirella";
   const name=document.getElementById('f_name').value;
@@ -291,12 +332,19 @@ saveAddBtn.onclick=function(){
   const tag=document.getElementById('f_tag').value;
   const sizes=document.getElementById('f_sizes').value.split(',').map(s=>s.trim()).filter(Boolean);
   const img=previewImg.src||DEFAULT_IMAGE;
-  const p={id:'p'+Date.now(),brand,name,price,priceLabel:'S/ '+price.toFixed(2),tag,sizes,img};
-  products.push(p);
+
+  if(saveAddBtn.dataset.edit){
+    const i=products.findIndex(x=>x.id===saveAddBtn.dataset.edit);
+    products[i]={id:saveAddBtn.dataset.edit,brand,name,price,tag,sizes,img};
+    delete saveAddBtn.dataset.edit;
+  } else {
+    products.push({id:'p'+Date.now(),brand,name,price,tag,sizes,img});
+  }
+
   saveProducts();
   modalBack.style.display='none';
   render();
-  showActionToast('Producto agregado');
+  showActionToast('Producto guardado');
   document.querySelectorAll('#modalBack input').forEach(i=>i.value=''); 
   previewImg.style.display='none';
 };
@@ -314,3 +362,4 @@ render();
 </script>
 </body>
 </html>
+
